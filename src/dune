@@ -1,0 +1,5 @@
+(library
+ (name idle)
+ (libraries fmt mirage-time-unix yojson)
+ (preprocess (pps ppx_deriving_yojson))
+)

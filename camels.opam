@@ -1,0 +1,30 @@
+opam-version: "2.0"
+maintainer: ["maintenance@identity-function.com"]
+authors: ["yomimono"]
+homepage: "https://github.com/yomimono/camels"
+bug-reports: "https://github.com/yomimono/camels/issues"
+dev-repo: "git+https://github.com/yomimono/camels.git"
+license: "GPLv3"
+tags: ["game"]
+
+build: [
+  ["dune" "build"]
+]
+
+depends: [
+  "cmdliner"
+  "dune" {build}
+  "fmt"
+  "mirage-clock-unix"
+  "mirage-time-unix"
+  "notty"
+  "ppx_deriving_yojson"
+  "yojson"
+]
+synopsis: "A game about camels"
+description: """
+Experience the glamor and excitement of open-source project maintenance, combined with the blazing-fast action of an idle game, with the heart-pounding immersion of a cutting-edge terminal interface!  Features emoji/non-emoji mode, metrics, and save/restore functionality.  Live the life of adventure you've always dreamed of, with Camels Game!
+"This game is extremely cynical" - area BSD user and former Google employee
+"It seems to have some floating point bugs" - you@example.com
+"not really sure whether it's a game or a shitpost" - yomimono
+"""
