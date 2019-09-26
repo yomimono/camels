@@ -1,0 +1,4 @@
+(executable
+ (public_name camels)
+ (libraries cmdliner fmt idle notty notty.lwt mirage-clock-unix mirage-time-unix)
+)
