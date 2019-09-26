@@ -18,6 +18,3 @@ You're running it on a potato.  You can disable expensive floating-point eye can
 
 Sure does.  You can tell it to save somewhere else with `camels -f`.
 
-# is this a game or a shitpost?
-
-Yes.
