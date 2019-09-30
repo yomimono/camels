@@ -72,7 +72,7 @@ let update_selected s controls e =
 let update s c event =
   let draw_board = update_selected s c in
   match event with
-  | `Key (`Escape, _mods)  -> { s with lets_bail = true }, c
+  | `Key ((`Escape | `ASCII 'q'), _mods) -> { s with lets_bail = true }, c
   | `Key (`Arrow _ as e, _mods) -> draw_board (`Key e)
       (* allow use of vi-keys as well *)
   | `Key ((`ASCII 'h'), _mods) -> draw_board (`Key (`Arrow `Left))
