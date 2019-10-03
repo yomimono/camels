@@ -8,16 +8,17 @@ license: "GPLv3"
 tags: ["game"]
 
 build: [
-  ["dune" "build"]
+  ["dune" "build" "-p" name "-j" jobs]
 ]
 
 depends: [
   "cmdliner"
-  "dune" {build}
+  "dune" {>= "1.8"}
   "fmt"
   "mirage-clock-unix"
   "mirage-time-unix"
   "notty"
+  "ocaml" {>= "4.07.0"}
   "ppx_deriving_yojson"
   "yojson"
 ]
