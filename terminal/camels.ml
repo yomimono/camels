@@ -58,7 +58,8 @@ let user_input term state controls =
     Lwt.return (state, controls)
 
 let rec loop savefile ~do_graphs ~emoji term state graphs controls : unit Lwt.t =
-  let display = Paint.render ~emoji state graphs controls in
+  let width = fst @@ Notty_lwt.Term.size term in
+  let display = Paint.render ~emoji ~width state graphs controls in
   Notty_lwt.Term.image term display >>= fun () ->
   Lwt.pick [
     tick state controls;

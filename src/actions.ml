@@ -222,4 +222,21 @@ let cd =
                    "Try to apply some automation."] (* TODO this really doesn't work thematically *)
   }
 
+let all = [
+  plus_lambda;
+  beta_reduce;
+  release;
+  contributors;
+  reviewers;
+  docs;
+  ci;
+  cd;
+]
+
+let max_explanation_width =
+  let explanations = List.map (fun a -> a.explanation) all in
+  let longest_line l = List.fold_left (fun most s -> max most (String.length s)) 0 l in
+  List.fold_left (fun longest e -> max longest (longest_line e)) 0 explanations
+
 (* later game content -- interactions with upstream? distribution? *)
+  (* No. Later game content is clearly :sparkles: AI *)

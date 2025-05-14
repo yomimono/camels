@@ -60,7 +60,8 @@ let stuff s =
 let halp s active = I.string A.(bg (gray 1) ++ fg white ++ st bold)
     (Fmt.str "%s: %s" active.name (active.message s))
 
-let explain active = I.vcat @@ List.map (I.string A.empty) active.explanation
+let explain active =
+  I.vcat @@ List.map (I.string A.empty) active.explanation
 
 let banner s = I.string A.(bg lightblue ++ fg white)
     (Fmt.str "your rank: %s" @@ Idle.State.rank s)
@@ -95,11 +96,6 @@ let control_panel s ~emoji controls = List.fold_left (fun l (n : Board.node) ->
     | None -> l
     | Some style -> l <-> background_hack style (I.string style label)
   ) I.empty controls.board
-(* 
-let timer ~emoji s =
-  let clock = if emoji then "🕰️" else "ticks" in
-  I.string A.empty (Fmt.str "%d %s" s.ticks clock)
-*)
 
 let maybe_show_graphs s (graphs : Graphs.t) =
   if s.quality.amount > 0. then
@@ -108,11 +104,17 @@ let maybe_show_graphs s (graphs : Graphs.t) =
   (maybe_draw s @@ graphs.camels <|> maybe_draw s @@ graphs.docs <|> maybe_draw s @@ graphs.downstream)
   else I.void 0 0
 
-let render s ~emoji (graphs : Graphs.t) (controls : Board.controls) =
+let render s ~emoji ~width (graphs : Graphs.t) (controls : Board.controls) =
   let b = border s in
   let active = controls.Board.active_control.control in
+  let explanation_width = Idle.Actions.max_explanation_width + 2 in
+  let fixed_components = b (control_panel s ~emoji controls) <|> b (I.hsnap explanation_width (explain active)) in
+  let w_left_over = width - (I.width fixed_components) in
+  let basic_stuff = stuff s in
+  let padded_stuff = I.hsnap ~align:`Left (w_left_over - 4) basic_stuff in
+
   (b (banner s) (* <|> b (timer ~emoji s) *)) <->
-  (b (stuff s) <|> b (control_panel s ~emoji controls) <|> b (explain active))
+  ((b padded_stuff) <|> fixed_components)
   <->
   halp s active
   <->
