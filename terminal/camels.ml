@@ -87,6 +87,6 @@ let makeitgo savefile seed eye_candy emoji =
   Lwt_stream.last_new (Notty_lwt.Term.events term) >>= fun _event ->
   loop savefile ~do_graphs ~emoji term start_state graphs Board.start_controls)
 
-let cmd = Term.(const makeitgo $ savefile $ seed $ eye_candy $ emoji), Term.info "camels" ~exits:Term.default_exits
+let cmd = Term.(const makeitgo $ savefile $ seed $ eye_candy $ emoji)
 
-let () = Term.(exit @@ eval cmd)
+let () = exit @@ Cmd.(eval @@ v (Cmd.info "camels") cmd)

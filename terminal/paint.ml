@@ -37,7 +37,7 @@ let maybe_draw s = function
   | Some image ->
     border s image
 
-let pp_item = Fmt.strf "%.4G %s"
+let pp_item = Fmt.str "%.4G %s"
 
 let stuff s =
   let render_item ((i : item), name) =
@@ -58,12 +58,12 @@ let stuff s =
 
 
 let halp s active = I.string A.(bg (gray 1) ++ fg white ++ st bold)
-    (Fmt.strf "%s: %s" active.name (active.message s))
+    (Fmt.str "%s: %s" active.name (active.message s))
 
 let explain active = I.vcat @@ List.map (I.string A.empty) active.explanation
 
 let banner s = I.string A.(bg lightblue ++ fg white)
-    (Fmt.strf "your rank: %s" @@ Idle.State.rank s)
+    (Fmt.str "your rank: %s" @@ Idle.State.rank s)
 
 let controlpanel_style = A.(fg white ++ st bold)
 let inactive_unusable = A.(bg lightred ++ controlpanel_style)
@@ -98,7 +98,7 @@ let control_panel s ~emoji controls = List.fold_left (fun l (n : Board.node) ->
 (* 
 let timer ~emoji s =
   let clock = if emoji then "🕰️" else "ticks" in
-  I.string A.empty (Fmt.strf "%d %s" s.ticks clock)
+  I.string A.empty (Fmt.str "%d %s" s.ticks clock)
 *)
 
 let maybe_show_graphs s (graphs : Graphs.t) =

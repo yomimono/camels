@@ -14,25 +14,25 @@ let no_change : tick_change = {
 }
 (* TODO: this is wrong when CI and CD are activated *)
 let pp_change = function
-  | None -> Fmt.strf ""
+  | None -> Fmt.str ""
   | Some c ->
     let exp = match c.exp_const, c.exp with
       | 0., 1. -> None 
-      | const, exp -> Some (Fmt.strf "%.2G ^ %.2G" const exp)
+      | const, exp -> Some (Fmt.str "%.2G ^ %.2G" const exp)
     in
     let mult = match c.mult_const, c.mult with
       | 1., 0. -> None
-      | const, mult -> Some (Fmt.strf "%.2G * %2G" const mult)
+      | const, mult -> Some (Fmt.str "%.2G * %2G" const mult)
     in
     let const = if c.add_const = 0.  then None
-      else Some (Fmt.strf "%.2G" c.add_const) in
+      else Some (Fmt.str "%.2G" c.add_const) in
     let per_tick = "/ ⏲️" in
     match exp, mult, const with
     | None, None, None -> ""
     | None, None, Some m | None, Some m, None | Some m, None, None ->
-      Fmt.strf "%s %s" m per_tick
-    | Some a, Some b, None | None, Some a, Some b | Some a, None, Some b -> Fmt.strf "(%s + %s) %s" a b per_tick
-    | Some a, Some b, Some c -> Fmt.strf "(%s + %s + %s) %s" a b c per_tick
+      Fmt.str "%s %s" m per_tick
+    | Some a, Some b, None | None, Some a, Some b | Some a, None, Some b -> Fmt.str "(%s + %s) %s" a b per_tick
+    | Some a, Some b, Some c -> Fmt.str "(%s + %s + %s) %s" a b c per_tick
 
 let plus_lambda =
   let increase = 1. in
@@ -41,7 +41,7 @@ let plus_lambda =
     name = "write code";
     is_visible = always;
     is_usable = always;
-    message = (fun _ -> Fmt.strf "produce %G code" increase);
+    message = (fun _ -> Fmt.str "produce %G code" increase);
     action = (fun s ->
       {s with code = {s.code with amount = s.code.amount +. increase}});
     explanation = ["Knock out some code."]; (* TODO: something more poetic here *)
@@ -60,7 +60,7 @@ let beta_reduce =
     is_usable = (fun s -> s.code.amount >= (cost s));
     is_visible = (fun s -> s.code.amount >= 10. || s.quality.amount > 0. || s.hype.amount > 0. || s.camels.amount > 1. || s.reviewers.amount > 0.);
     message =
-      (fun s -> Fmt.strf "remove %G code and gain %G quality" (cost s) quality_gain);
+      (fun s -> Fmt.str "remove %G code and gain %G quality" (cost s) quality_gain);
     action = (fun s ->
       {s with code = {s.code with amount = s.code.amount -. (cost s)};
               quality = {s.quality with amount = s.quality.amount +. quality_gain}; 
@@ -84,7 +84,7 @@ let release =
     name = "release package";
     is_usable = (fun s -> s.quality.amount >= quality_threshhold s);
     is_visible = (fun s -> s.quality.amount >= quality_threshhold s || s.hype.amount > 0. || s.camels.amount > 1. || s.reviewers.amount > 0.);
-    message = (fun s -> Fmt.strf "spend %G quality and gain %G hype"
+    message = (fun s -> Fmt.str "spend %G quality and gain %G hype"
               (quality_threshhold s) hype_gain);
     action = (fun s -> { s with hype =
                             {s.hype with amount = s.hype.amount +. hype_gain };
@@ -117,7 +117,7 @@ let contributors =
     emoji = "🐫";
     is_usable = (fun s -> s.hype.amount >= hype_threshhold s);
     is_visible = (fun s -> s.hype.amount > 0. || s.camels.amount > 1.);
-    message = (fun s -> Fmt.strf "spend %G hype and gain %G contributor" (hype_threshhold s) contributor_gain);
+    message = (fun s -> Fmt.str "spend %G hype and gain %G contributor" (hype_threshhold s) contributor_gain);
     action = (fun s ->
         {s with code = {s.code with change = boost_add_const 0.1 s.code.change};
                 camels = {s.camels with amount = s.camels.amount +. contributor_gain;
@@ -144,7 +144,7 @@ let reviewers =
     is_usable = (fun s -> s.camels.amount >= (camel_cost +. 1.)
                           && s.hype.amount >= next_reviewer_cost s);
     is_visible = (fun s -> s.camels.amount >= 2. || s.reviewers.amount > 0.);
-    message = (fun s -> Fmt.strf "spend %G hype and %G camel, gain %G reviewer" (next_reviewer_cost s) camel_cost reviewer_gain);
+    message = (fun s -> Fmt.str "spend %G hype and %G camel, gain %G reviewer" (next_reviewer_cost s) camel_cost reviewer_gain);
     action = (fun s ->
       { s with
         code = {s.code with change = boost_add_const ~-.1. s.code.change};
@@ -176,7 +176,7 @@ let docs =
     emoji = "🕮 ";
     is_visible = active;
     is_usable = active;
-    message = (fun s -> Fmt.strf "produce %G documentation" (increase s));
+    message = (fun s -> Fmt.str "produce %G documentation" (increase s));
     action = (fun s -> {s with docs = {s.docs with amount = s.docs.amount +. increase s;
                                                    visible = true;}
                        }
