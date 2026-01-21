@@ -117,7 +117,7 @@ let contributors =
     emoji = "🐫";
     is_usable = (fun s -> s.hype.amount >= hype_threshhold s);
     is_visible = (fun s -> s.hype.amount > 0. || s.camels.amount > 1.);
-    message = (fun s -> Fmt.str "spend %G hype and gain %G contributor" (hype_threshhold s) contributor_gain);
+    message = (fun s -> Fmt.str "spend %G hype and gain %G camel" (hype_threshhold s) contributor_gain);
     action = (fun s ->
         {s with code = {s.code with change = boost_add_const 0.1 s.code.change};
                 camels = {s.camels with amount = s.camels.amount +. contributor_gain;
