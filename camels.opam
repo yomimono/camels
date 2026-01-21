@@ -17,7 +17,7 @@ depends: [
   "fmt"
   "mirage-clock-unix" {>= "4.2.0"}
   "mirage-time-unix"
-  "notty"
+  "notty-community"
   "ocaml" {>= "4.07.0"}
   "ppx_deriving_yojson"
   "yojson"
