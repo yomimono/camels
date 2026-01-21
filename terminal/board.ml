@@ -16,10 +16,13 @@ type controls = {
 
 let rec lambda_node =
   { control = Actions.plus_lambda;
-    left = None; right = None; up = None; down = Some beta_node }
+    left = None; right = None; up = None; down = Some sparkle_node;}
+and sparkle_node =
+  { control = Actions.sparkle;
+    left = None; right = None; up = Some lambda_node; down = Some beta_node;}
 and beta_node =
   {control = Actions.beta_reduce;
-   left = None; right = None; up = Some lambda_node; down = Some package_node;}
+   left = None; right = None; up = Some sparkle_node; down = Some package_node;}
 and package_node =
   {control = Actions.release;
    left = None; right = None; up = Some beta_node; down = Some camel_node;}
@@ -31,15 +34,9 @@ and docs_node =
    left = None; right = None; up = Some camel_node; down = Some reviewer_node;}
 and reviewer_node =
   {control = Actions.reviewers;
-   left = None; right = None; up = Some docs_node; down = Some ci_node;}
-and ci_node =
-  {control = Actions.ci ;
-   left = None; right = None; up = Some reviewer_node; down = Some cd_node}
-and cd_node =
-  {control = Actions.cd ;
-   left = None; right = None; up = Some ci_node; down = None }
+   left = None; right = None; up = Some docs_node; down = None}
 
-let nodes = [lambda_node; beta_node; package_node; camel_node; docs_node; reviewer_node; ci_node; cd_node]
+let nodes = [lambda_node; sparkle_node; beta_node; package_node; camel_node; docs_node; reviewer_node;]
 
 let start_controls = {
   active_control = List.hd nodes;

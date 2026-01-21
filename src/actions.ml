@@ -12,7 +12,6 @@ let no_change : tick_change = {
   mult = 0.;
   add_const = 0.;
 }
-(* TODO: this is wrong when CI and CD are activated *)
 let pp_change = function
   | None -> Fmt.str ""
   | Some c ->
@@ -189,48 +188,36 @@ let docs =
     "the more code there is."];
   }
 
-let ci =
-(* CI makes each of your camels contribute a small amount of quality. *)
-  {
-    emoji = "🤖";
-    name = "set up ci";
-    is_visible = (fun s -> (s.camels.amount +. s.reviewers.amount) > 100. || s.ci.active);
-    is_usable = (fun s -> (s.camels.amount +. s.reviewers.amount) > 100. && not s.ci.active);
-    message = (fun _ -> "each camel will contribute some quality");
-    action = (fun s -> {s with ci = {s.ci with active = true;};});
-    explanation = [
-      "We can't make sure that";
-      "each line of code is a good one,";
-      "but we can at least make sure";
-      "they don't break the build.  ...right?"];
-  }
-
-(* TODO: CD makes quality directly convert to hype when possible *)
-(* for now, CD makes hype cheaper *)
-let cd =
-  {
-    name = "set up cd";
-    emoji = "🔁🤖";
-    is_visible = (fun s -> (s.camels.amount +. s.reviewers.amount) > 200. || s.cd.active);
-    is_usable = (fun s -> (s.camels.amount +. s.reviewers.amount) > 100. && not s.cd.active);
-    message = (fun _ -> "releasing packages costs less quality");
-
-    action = (fun s -> {s with cd = {s.cd with active = true;};});
-    explanation = ["So many new features,";
-                   "so many bugfixes...";
-                   "releases are a lot of work.";
-                   "Try to apply some automation."] (* TODO this really doesn't work thematically *)
-  }
+let sparkle = {
+  name = "ask sloppy";
+  emoji = "✨";
+  is_visible = (fun _ -> true);
+  is_usable = (fun _ -> true);
+  message = (fun _ -> "generate an unknown amount of code, of unknown quality");
+  action = (fun s ->
+      let roll = Random.int 10_000 in
+      if roll <= 1000 then
+        {s with code = {s.code with amount = s.code.amount +. (float_of_int roll /. 10.)};
+                quality = {s.quality with amount = s.quality.amount -. (float_of_int roll /. 50.)}}
+      else
+        s
+    );
+  explanation = [
+    "Why write code yourself? Try your luck";
+    "with the latest and greatest in code";
+    "generation tools! Now with extra";
+    "sparkles!"
+  ]
+}
 
 let all = [
   plus_lambda;
+  sparkle;
   beta_reduce;
   release;
   contributors;
   reviewers;
   docs;
-  ci;
-  cd;
 ]
 
 let max_explanation_width =
