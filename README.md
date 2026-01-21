@@ -6,6 +6,14 @@ Use the arrow keys (or vi-keys, if you prefer) to choose an action from the list
 
 Excellent question.  Next!
 
+# how do I install?
+
+It's [camels](https://opam.ocaml.org/packages/camels/) on opam. [Install opam](https://opam.ocaml.org/doc/Install.html) and then you can install with:
+
+```
+opam install camels
+```
+
 # i don't like emoji :(
 
 Consult `camels --help` for alternative invocation modes.
